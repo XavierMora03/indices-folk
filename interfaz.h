@@ -109,7 +109,11 @@ private:
     for (int i = 0; i < tamanio; i++) {
       char caracter_mayuscula = toupper(cadena[i]);
       lugarAGuardar[i] = caracter_mayuscula;
+      if (lugarAGuardar[i] == '\0')
+        lugarAGuardar[i] = ' ';
     }
+
+    lugarAGuardar[tamanio] = '\0';
   }
 };
 

@@ -4,6 +4,9 @@
 #define DELIMITADOR_REGISTRO '\n'
 #define DELIMITADOR_CAMPO '|'
 #define NOMBRE_ARCHIVO_DATOS "hacienda.txt"
+#define LONGITUD_TOTAL                                                         \
+  T_CIUDAD + T_DIRECCION + T_FECHA_NACIMIENTO + T_NOMBRE + T_APELLIDO * 2 +    \
+      T_RFC + T_TELEFONO + T_ESTADO_CIVIL + T_DEPENDIENTES + 10 + 1
 
 #include <cstring>
 #include <fstream>
@@ -17,9 +20,14 @@ using namespace std;
 class ArchivoDatos {
 private:
   fstream archivo;
+  const int longitudTotal;
+  char buffer_registro[LONGITUD_TOTAL];
 
 public:
-  ArchivoDatos(){};
+  ArchivoDatos()
+      : longitudTotal(T_CIUDAD + T_DIRECCION + T_FECHA_NACIMIENTO + T_NOMBRE +
+                      T_APELLIDO * 2 + T_RFC + T_TELEFONO + T_ESTADO_CIVIL +
+                      T_DEPENDIENTES + 11){};
   ~ArchivoDatos(){};
 
   void inicializaArchivo() {
@@ -36,6 +44,8 @@ public:
     const char *localizacionCadena = generarTextoRegistro(contr);
     // el texto convertido, (lo tenemos en localizacionCadena) lo pasamos a
     // nuestra funcion que escribe escribirRegistro
+    cout << "asi llego wey\n";
+    cout << localizacionCadena;
     escribirRegistro(localizacionCadena);
   }
 
@@ -56,6 +66,7 @@ private:
     s += contr.ciudad;
     s += DELIMITADOR_CAMPO;
     s += contr.fechaNacimiento;
+    s += DELIMITADOR_CAMPO;
     s += contr.estadoCivil;
     s += DELIMITADOR_CAMPO;
     s += normalizaNumero(contr.dependientes, 2);
@@ -63,7 +74,8 @@ private:
     s += DELIMITADOR_REGISTRO;
     // retormanmos el puntero donde esta la cadena, convirtiendolo con el metodo
     // c_str() de s
-    return s.c_str();
+    strcpy(buffer_registro, s.c_str());
+    return buffer_registro;
   }
   void escribirRegistro(const char *registro) {
     archivo.open(NOMBRE_ARCHIVO_DATOS, ios::app);
