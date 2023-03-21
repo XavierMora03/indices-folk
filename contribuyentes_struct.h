@@ -37,10 +37,19 @@ struct stIndiceRfc {
   int indice; // 2 bytes (NRR)
 };
 
+string generaLlaveCanonica(contribuyente contr) {
+  string rfc;
+  // Crear una función con la forma canónica de la llave (RFC) CCCCDDDDDDDCD
+  //(C=character, D= Digit)
+
+  // ya que pusiste esta el rfc lo retornamos :)
+  return rfc;
+}
 // pone ceros a la izquiera de numero hasta llenar n digitos
 string normalizaNumero(int numero, int digitos) {
   stringstream ss;
   ss << setw(digitos) << setfill('0') << numero;
   return ss.str();
 }
+
 #endif // CONTR_STRUCT_H

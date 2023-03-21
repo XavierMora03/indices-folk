@@ -31,15 +31,7 @@ public:
       archivo.open(NOMBRE_ARCHIVO_DATOS, ios::out);
     archivo.close();
   }
-  /*
-    void escribirContribuyente(const contribuyente &contr) {
-      // convertimos el struct a texto con generarTextoRegistro
-      const char *localizacionCadena = generarTextoRegistro(contr);
-      // el texto convertido, (lo tenemos en localizacionCadena) lo pasamos a
-      // nuestra funcion que escribe escribirRegistro
-      escribirRegistro(localizacionCadena);
-    }
-  */
+
   void escribirContribuyente(const contribuyente &contr) {
     // Lo convertimos a string
     string s = contr.rfc;
@@ -63,13 +55,12 @@ public:
     s += normalizaNumero(contr.dependientes, 2);
     // final de registro, aniadimos el DELIMITADOR_REGISTRO
     s += DELIMITADOR_REGISTRO;
-    // s.str() nos lo camiba a cadena, le pasamos una cadena para que escriba al
-    // registro
-    escribirRegistro(s.c_str());
+    // pasamos registro a escribirRegistro, le pasamos 's'
+    escribirRegistro(s);
   }
 
 private:
-  void escribirRegistro(const char *registro) {
+  void escribirRegistro(const string &registro) {
     archivo.open(NOMBRE_ARCHIVO_DATOS, ios::app);
     if (archivo.fail() || archivo.bad()) {
       cout << "ERROR EN ARCHIVO PRINCIPAL" << endl;
