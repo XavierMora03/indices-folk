@@ -3,10 +3,7 @@
 
 #define DELIMITADOR_REGISTRO '\n'
 #define DELIMITADOR_CAMPO '|'
-#define NOMBRE_ARCHIVO_DATOS "hacienda.txt"
-#define LONGITUD_TOTAL                                                         \
-  T_CIUDAD + T_DIRECCION + T_FECHA_NACIMIENTO + T_NOMBRE + T_APELLIDO * 2 +    \
-      T_RFC + T_TELEFONO + T_ESTADO_CIVIL + T_DEPENDIENTES + 10 + 1
+#define NOMBRE_ARCHIVO_DATOS "HACIENDA.txt"
 
 #include <cstring>
 #include <fstream>
@@ -19,8 +16,8 @@ using namespace std;
 
 class ArchivoDatos {
 private:
+  // Este archivo lo usaremos para insertar los nuevos registros
   fstream archivo;
-  char buffer_registro[LONGITUD_TOTAL];
 
 public:
   ArchivoDatos(){};
@@ -66,12 +63,9 @@ public:
     s += normalizaNumero(contr.dependientes, 2);
     // final de registro, aniadimos el DELIMITADOR_REGISTRO
     s += DELIMITADOR_REGISTRO;
-    // retormanmos el puntero donde esta la cadena, convirtiendolo con el metodo
-    // c_str() de s
-    //
+    // s.str() nos lo camiba a cadena, le pasamos una cadena para que escriba al
+    // registro
     escribirRegistro(s.c_str());
-    // strcpy(buffer_registro, s.c_str());
-    // return buffer_registro;
   }
 
 private:

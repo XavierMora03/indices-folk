@@ -1,6 +1,8 @@
 #ifndef CONTR_STRUCT_H
 #define CONTR_STRUCT_H
 
+// tamaños de todos los campos, así si cambia alguno el programa seguira
+// funcionando con los nuevos valores.
 #define T_RFC 13
 #define T_NOMBRE 32
 #define T_APELLIDO 32

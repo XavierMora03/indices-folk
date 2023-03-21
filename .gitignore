@@ -1,3 +1,6 @@
+main
+main.out
+main.o
 # Prerequisites
 *.d
 
