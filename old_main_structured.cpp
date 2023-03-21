@@ -33,27 +33,28 @@ sección y nombre del profesor.
 
 using namespace std;
 
-void normalizarYGuardar(char*, string, int);
+void normalizarYGuardar(char *, string, int);
 string normalizarFecha(int, int, int);
 struct contribuyente {
-  char rfc[T_RFC];  // mascara (formato de captura) CCCCDDDDDDDCD
-  char nombre[T_NOMBRE];
-  char apellido[2][T_APELLIDO];
-  char telefono[T_TELEFONO];
-  char direccion[T_DIRECCION];
-  char ciudad[T_CIUDAD];
-  char fechaNacimiento[T_FECHA_NACIMIENTO];  // formato AAAA/MM/DD: Año, mes y
-                                             //  día
+  char rfc[T_RFC + 1]; // mascara (formato de captura) CCCCDDDDDDDCD
+  char nombre[T_NOMBRE + 1];
+  char apellido[2][T_APELLIDO + 1];
+  char telefono[T_TELEFONO + 1];
+  char direccion[T_DIRECCION + 1];
+  char ciudad[T_CIUDAD + 1];
+  char
+      fechaNacimiento[T_FECHA_NACIMIENTO + 1]; // formato AAAA/MM/DD: Año, mes y
+                                               //  día
   char estadoCivil;
   int dependientes;
 } arregloContribuyentes[TAMANIO_LISTA_CONTRIBUYENTES];
 
 struct stIndiceRfc {
   char rfc[T_RFC];
-  int indice;  // 2 bytes (NRR)
+  int indice; // 2 bytes (NRR)
 };
 
-const void mostrarRegistro(const contribuyente& contr) {
+const void mostrarRegistro(const contribuyente &contr) {
   cout << "RFC: " << contr.rfc << endl;
   cout << "Nombre: " << contr.nombre << endl;
   cout << "Apellido paterno: " << contr.apellido[0] << endl;
@@ -114,13 +115,14 @@ void altaRegistro() {
   cout << "Ingresa el numero de dependientes: ";
   cin >> ndependientes;
   getchar();
-  if (ndependientes > 9) ndependientes = 9;
+  if (ndependientes > 9)
+    ndependientes = 9;
   auxContribuyente.dependientes = ndependientes;
 
   arregloContribuyentes[indice++] = auxContribuyente;
 }
 
-void normalizarYGuardar(char* lugarAGuardar, string cadena, int tamanio) {
+void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
   // Llenamos de espacio, hasta que tenga la longitud de tamanio con metodo
   // resize, y le indicamos el tamanio
   cadena.resize(tamanio);
@@ -152,17 +154,30 @@ void inicializaArchivo(string nombre_archivo) {
   archivo.close();
 }
 
-char* generarTextoRegistro(contribuyente contr) { return "jja"; }
-void escribirRegistro(char* registro) {
+char *generarTextoRegistro(contribuyente contr) {
+  string s = contr.rfc + DELIMITADOR_CAMPO;
+  s += contr.nombre + DELIMITADOR_CAMPO;
+  s += contr.apellido[0] + DELIMITADOR_CAMPO;
+  s += contr.apellido[1] + DELIMITADOR_CAMPO;
+  s += contr.telefono + DELIMITADOR_CAMPO;
+  s += contr.direccion + DELIMITADOR_CAMPO;
+  s += contr.ciudad + DELIMITADOR_CAMPO;
+  s += contr.fechaNacimiento + DELIMITADOR_CAMPO;
+  s += contr.estadoCivil + DELIMITADOR_CAMPO;
+  s += normalizaNumero(contr.dependientes, 2) + DELIMITADOR_REGISTRO;
+
+  return (char *)s.c_str();
+}
+void escribirRegistro(char *registro) {
   ofstream data(NOMBRE_ARCHIVO_DATOS);
-  data.write(registro, sizeof(registro));
+  data << registro;
 }
 
-int main(int argc, char const* argv[]) {
+int main(int argc, char const *argv[]) {
   inicializaArchivo(NOMBRE_ARCHIVO_DATOS);
   altaRegistro();
-  altaRegistro();
+  char escribir;
+  escribirRegistro(generarTextoRegistro(arregloContribuyentes[0]));
   mostrarRegistro(arregloContribuyentes[0]);
-  mostrarRegistro(arregloContribuyentes[1]);
   return 0;
 }

@@ -1,3 +1,6 @@
+#ifndef CONTR_STRUCT_H
+#define CONTR_STRUCT_H
+
 #define T_RFC 13
 #define T_NOMBRE 32
 #define T_APELLIDO 32
@@ -8,12 +11,6 @@
 #define T_ESTADO_CIVIL 1
 #define T_DEPENDIENTES 1
 
-#include <iostream>
-
-using namespace std;
-
-void normalizarYGuardar(char *, string, int);
-string normalizarFecha(int, int, int);
 struct contribuyente {
   char rfc[T_RFC + 1]; // mascara (formato de captura) CCCCDDDDDDDCD
   char nombre[T_NOMBRE + 1];
@@ -32,3 +29,5 @@ struct stIndiceRfc {
   char rfc[T_RFC];
   int indice; // 2 bytes (NRR)
 };
+
+#endif // CONTR_STRUCT_H

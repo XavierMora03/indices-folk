@@ -84,13 +84,13 @@ public:
     // arregloContribuyentes[indice++] = auxContribuyente;
   }
 
-private:
   string normalizaNumero(int numero, int digitos) {
     stringstream ss;
     ss << setw(digitos) << setfill('0') << numero;
     return ss.str();
   }
 
+private:
   string normalizarFecha(int d, int m, int a) {
     string dia = normalizaNumero(d, 2);
     string mes = normalizaNumero(m, 2);
@@ -112,8 +112,4 @@ private:
   }
 };
 
-Interfaz ::Interfaz() {}
-
-Interfaz ::~Interfaz() {}
-
-#endif INTERFAZ_H
+#endif // INTERFAZ_H
