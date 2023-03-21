@@ -11,15 +11,6 @@
 
 using namespace std;
 int main(int argc, char *argv[]) {
-  contribuyente contr;
-  Interfaz InterfazObj;
-  ArchivoDatos Archivo;
-
-  Archivo.inicializaArchivo();
-
-  contr = InterfazObj.altaRegistro();
-  Archivo.escribirContribuyente(contr);
-  contr = InterfazObj.altaRegistro();
-  Archivo.escribirContribuyente(contr);
+  // se puede ir creando el menu, y la funcion agregar :)
   return 0;
 }
