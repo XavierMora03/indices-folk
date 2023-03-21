@@ -35,6 +35,7 @@ struct stIndiceRfc {
   int indice; // 2 bytes (NRR)
 };
 
+// pone ceros a la izquiera de numero hasta llenar n digitos
 string normalizaNumero(int numero, int digitos) {
   stringstream ss;
   ss << setw(digitos) << setfill('0') << numero;

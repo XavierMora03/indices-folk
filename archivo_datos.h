@@ -20,14 +20,10 @@ using namespace std;
 class ArchivoDatos {
 private:
   fstream archivo;
-  const int longitudTotal;
   char buffer_registro[LONGITUD_TOTAL];
 
 public:
-  ArchivoDatos()
-      : longitudTotal(T_CIUDAD + T_DIRECCION + T_FECHA_NACIMIENTO + T_NOMBRE +
-                      T_APELLIDO * 2 + T_RFC + T_TELEFONO + T_ESTADO_CIVIL +
-                      T_DEPENDIENTES + 11){};
+  ArchivoDatos(){};
   ~ArchivoDatos(){};
 
   void inicializaArchivo() {
@@ -38,19 +34,17 @@ public:
       archivo.open(NOMBRE_ARCHIVO_DATOS, ios::out);
     archivo.close();
   }
-
+  /*
+    void escribirContribuyente(const contribuyente &contr) {
+      // convertimos el struct a texto con generarTextoRegistro
+      const char *localizacionCadena = generarTextoRegistro(contr);
+      // el texto convertido, (lo tenemos en localizacionCadena) lo pasamos a
+      // nuestra funcion que escribe escribirRegistro
+      escribirRegistro(localizacionCadena);
+    }
+  */
   void escribirContribuyente(const contribuyente &contr) {
-    // convertimos el struct a texto con generarTextoRegistro
-    const char *localizacionCadena = generarTextoRegistro(contr);
-    // el texto convertido, (lo tenemos en localizacionCadena) lo pasamos a
-    // nuestra funcion que escribe escribirRegistro
-    cout << "asi llego wey\n";
-    cout << localizacionCadena;
-    escribirRegistro(localizacionCadena);
-  }
-
-private:
-  const char *generarTextoRegistro(const contribuyente &contr) {
+    // Lo convertimos a string
     string s = contr.rfc;
     s += DELIMITADOR_CAMPO;
     s += contr.nombre;
@@ -74,9 +68,13 @@ private:
     s += DELIMITADOR_REGISTRO;
     // retormanmos el puntero donde esta la cadena, convirtiendolo con el metodo
     // c_str() de s
-    strcpy(buffer_registro, s.c_str());
-    return buffer_registro;
+    //
+    escribirRegistro(s.c_str());
+    // strcpy(buffer_registro, s.c_str());
+    // return buffer_registro;
   }
+
+private:
   void escribirRegistro(const char *registro) {
     archivo.open(NOMBRE_ARCHIVO_DATOS, ios::app);
     if (archivo.fail() || archivo.bad()) {

@@ -19,5 +19,7 @@ int main(int argc, char *argv[]) {
 
   contr = InterfazObj.altaRegistro();
   Archivo.escribirContribuyente(contr);
+  contr = InterfazObj.altaRegistro();
+  Archivo.escribirContribuyente(contr);
   return 0;
 }

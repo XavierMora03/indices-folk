@@ -76,8 +76,8 @@ public:
     cout << "Ingresa el numero de dependientes: ";
     cin >> ndependientes;
     getchar();
-    if (ndependientes > 9)
-      ndependientes = 9;
+    if (ndependientes > 99)
+      ndependientes = 99;
     auxContribuyente.dependientes = ndependientes;
 
     return auxContribuyente;
