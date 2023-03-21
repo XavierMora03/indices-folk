@@ -11,6 +11,11 @@
 #define T_ESTADO_CIVIL 1
 #define T_DEPENDIENTES 1
 
+#include <iomanip>
+#include <sstream>
+#include <string>
+
+using namespace std;
 struct contribuyente {
   char rfc[T_RFC + 1]; // mascara (formato de captura) CCCCDDDDDDDCD
   char nombre[T_NOMBRE + 1];
@@ -26,8 +31,13 @@ struct contribuyente {
 };
 
 struct stIndiceRfc {
-  char rfc[T_RFC];
+  char rfc[T_RFC + 1];
   int indice; // 2 bytes (NRR)
 };
 
+string normalizaNumero(int numero, int digitos) {
+  stringstream ss;
+  ss << setw(digitos) << setfill('0') << numero;
+  return ss.str();
+}
 #endif // CONTR_STRUCT_H

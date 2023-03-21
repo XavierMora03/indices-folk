@@ -10,10 +10,10 @@
 using namespace std;
 class Interfaz {
 public:
-  Interfaz();
-  ~Interfaz();
+  Interfaz(){};
+  ~Interfaz(){};
 
-  const void mostrarRegistro(const contribuyente &contr) {
+  static const void mostrarRegistro(const contribuyente &contr) {
     cout << "RFC: " << contr.rfc << endl;
     cout << "Nombre: " << contr.nombre << endl;
     cout << "Apellido paterno: " << contr.apellido[0] << endl;
@@ -27,7 +27,7 @@ public:
   }
 
   // no se si el const afecte
-  const contribuyente altaRegistro() {
+  static const contribuyente altaRegistro() {
     contribuyente auxContribuyente;
     string auxString;
     cout << "ALTA REGISTRO" << endl;
@@ -84,14 +84,14 @@ public:
     // arregloContribuyentes[indice++] = auxContribuyente;
   }
 
-  string normalizaNumero(int numero, int digitos) {
+  static string normalizaNumero(int numero, int digitos) {
     stringstream ss;
     ss << setw(digitos) << setfill('0') << numero;
     return ss.str();
   }
 
 private:
-  string normalizarFecha(int d, int m, int a) {
+  static string normalizarFecha(int d, int m, int a) {
     string dia = normalizaNumero(d, 2);
     string mes = normalizaNumero(m, 2);
     string anio = normalizaNumero(a, 4);
@@ -99,7 +99,8 @@ private:
     return dia + '/' + mes + '/' + anio;
   }
 
-  void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
+  static void normalizarYGuardar(char *lugarAGuardar, string cadena,
+                                 int tamanio) {
     // Llenamos de espacio, hasta que tenga la longitud de tamanio con metodo
     // resize, y le indicamos el tamanio
     cadena.resize(tamanio);
