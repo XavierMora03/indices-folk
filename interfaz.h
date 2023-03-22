@@ -107,8 +107,14 @@ private:
     // hay que obener la letra en mayuscula de nuestra posicion i, lo metemos
     // dentro de el metodo touuper, y lo asiganmos a cacter mayucula
     for (int i = 0; i < tamanio; i++) {
+      // lo toupper nos devuelve la mayuscula y lo guardamos
       char caracter_mayuscula = toupper(cadena[i]);
+      // reescribimos el caracter, pero ahora en mayuscula
       lugarAGuardar[i] = caracter_mayuscula;
+
+      // esto es para que no nos corte la cadena, y sigamos poniendo espacios
+      // '\0' es un caracter que indica cuando se acaba la cadena, si lo
+      // encontramos lo reemplazamos por un espacio
       if (lugarAGuardar[i] == '\0')
         lugarAGuardar[i] = ' ';
     }
