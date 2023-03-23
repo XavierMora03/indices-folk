@@ -1,15 +1,16 @@
 // my_class.h
-#ifndef INTERFAZ_H // include guard
+#ifndef INTERFAZ_H  // include guard
 #define INTERFAZ_H
 
-#include "contribuyentes_struct.h"
 #include <cctype>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+
+#include "contribuyentes_struct.h"
 using namespace std;
 class Interfaz {
-public:
+ public:
   Interfaz(){};
   ~Interfaz(){};
 
@@ -76,21 +77,14 @@ public:
     cout << "Ingresa el numero de dependientes: ";
     cin >> ndependientes;
     getchar();
-    if (ndependientes > 99)
-      ndependientes = 99;
+    if (ndependientes > 99) ndependientes = 99;
     auxContribuyente.dependientes = ndependientes;
 
     return auxContribuyente;
     // arregloContribuyentes[indice++] = auxContribuyente;
   }
 
-  static string normalizaNumero(int numero, int digitos) {
-    stringstream ss;
-    ss << setw(digitos) << setfill('0') << numero;
-    return ss.str();
-  }
-
-private:
+ private:
   static string normalizarFecha(int d, int m, int a) {
     string dia = normalizaNumero(d, 2);
     string mes = normalizaNumero(m, 2);
@@ -115,12 +109,10 @@ private:
       // esto es para que no nos corte la cadena, y sigamos poniendo espacios
       // '\0' es un caracter que indica cuando se acaba la cadena, si lo
       // encontramos lo reemplazamos por un espacio
-      if (lugarAGuardar[i] == '\0')
-        lugarAGuardar[i] = ' ';
+      if (lugarAGuardar[i] == '\0') lugarAGuardar[i] = ' ';
     }
-
     lugarAGuardar[tamanio] = '\0';
   }
 };
 
-#endif // INTERFAZ_H
+#endif  // INTERFAZ_H

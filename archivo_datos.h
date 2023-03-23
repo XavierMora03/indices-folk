@@ -1,8 +1,6 @@
 #ifndef ARCHIVO_DATOS_H
 #define ARCHIVO_DATOS_H
 
-#define DELIMITADOR_REGISTRO '\n'
-#define DELIMITADOR_CAMPO '|'
 #define NOMBRE_ARCHIVO_DATOS "HACIENDA.txt"
 
 #include <cstring>
@@ -56,11 +54,11 @@ public:
     // final de registro, aniadimos el DELIMITADOR_REGISTRO
     s += DELIMITADOR_REGISTRO;
     // pasamos registro a escribirRegistro, le pasamos 's'
-    escribirRegistro(s);
+    escribirArchivo(s);
   }
 
 private:
-  void escribirRegistro(const string &registro) {
+  void escribirArchivo(const string &registro) {
     archivo.open(NOMBRE_ARCHIVO_DATOS, ios::app);
     if (archivo.fail() || archivo.bad()) {
       cout << "ERROR EN ARCHIVO PRINCIPAL" << endl;
