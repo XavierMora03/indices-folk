@@ -90,7 +90,7 @@ protected:
   void escribirArchivo(const string &registro) {
     archivo.open(nombre_archivo, ios::app);
     if (archivo.fail() || archivo.bad()) {
-      cout << "ERROR EN ARCHIVO PRINCIPAL" << endl;
+      cout << "ERROR EN ARCHIVO " << nombre_archivo << endl;
       return;
     }
     archivo << registro;

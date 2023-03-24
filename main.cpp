@@ -16,12 +16,16 @@ int main(int argc, char *argv[]) {
   ArchivoDatos ArchivoDatos(NOMBRE_ARCHIVO_DATOS);
   IndicePrimario IndicePrimario(NOMBRE_ARCHIVO_INDICE_PRIMARIO);
   int i = 3;
-  while (i-- > 0) {
-    ArchivoDatos.inicializaArchivo();
-    IndicePrimario.inicializaArchivo();
-    contribuyente cont = Interfaz.altaRegistro();
-    ArchivoDatos.escribirContribuyente(cont);
-    IndicePrimario.insertar(cont.rfc, 1);
-  }
+  IndicePrimario.imprimirRegistros();
+
+  /*
+    while (i-- > 0) {
+      contribuyente cont = Interfaz.altaRegistro();
+      ArchivoDatos.escribirContribuyente(cont);
+      IndicePrimario.insertar(cont.rfc, 1);
+    }
+    */
+  stIndiceRfc a("aaaaAA", 43), b("zzzzz", 43);
+  cout << "velda: " << (b < a);
   return 0;
 }

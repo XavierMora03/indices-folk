@@ -12,7 +12,7 @@ using namespace std;
 
 class ArchivoDatos : public SimpleArchivo {
 public:
-  ArchivoDatos(string s) : SimpleArchivo(s) {}
+  ArchivoDatos(string s) : SimpleArchivo(s) { inicializaArchivo(); }
   ~ArchivoDatos() {}
 
   void escribirContribuyente(const contribuyente &contr) {
