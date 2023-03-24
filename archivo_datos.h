@@ -39,9 +39,6 @@ public:
     // final de registro, aniadimos el DELIMITADOR_REGISTRO
     s += DELIMITADOR_REGISTRO;
 
-    cout << "SIU TENEMOS<<" << s.size() << " " << T_REGISTRO_CONTRIBUYENTE
-         << endl;
-
     // pasamos registro a escribirRegistro, le pasamos 's'
     escribirArchivo(s);
   }

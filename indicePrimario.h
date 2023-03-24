@@ -29,8 +29,9 @@ public:
   IndicePrimario(string s) : SimpleArchivo(s) {}
   ~IndicePrimario() {}
 
-  int insertar(char *rfc, int direccion) {
-    stIndiceRfc auxIndice(rfc, direccion);
+  int insertar(char *rfc) {
+    int ultimaDireccion = T_REGISTRO_CONTRIBUYENTE * list.size();
+    stIndiceRfc auxIndice(rfc, ultimaDireccion);
     list.insert(upper_bound(list.begin(), list.end(), auxIndice), auxIndice);
 
     string registroString = registroAtexto(auxIndice);
@@ -39,7 +40,7 @@ public:
   }
 
 private:
-  string registroAtexto(const stIndiceRfc &ind) {
+  string registroAtexto(stIndiceRfc &ind) {
     string buffer;
     buffer += ind.rfc;
     buffer += DELIMITADOR_CAMPO;
