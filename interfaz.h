@@ -1,5 +1,5 @@
 // my_class.h
-#ifndef INTERFAZ_H  // include guard
+#ifndef INTERFAZ_H // include guard
 #define INTERFAZ_H
 
 #include <cctype>
@@ -10,7 +10,7 @@
 #include "contribuyentes_struct.h"
 using namespace std;
 class Interfaz {
- public:
+public:
   Interfaz(){};
   ~Interfaz(){};
 
@@ -77,14 +77,14 @@ class Interfaz {
     cout << "Ingresa el numero de dependientes: ";
     cin >> ndependientes;
     getchar();
-    if (ndependientes > 99) ndependientes = 99;
+    if (ndependientes > 9)
+      ndependientes = 9;
     auxContribuyente.dependientes = ndependientes;
 
     return auxContribuyente;
-    // arregloContribuyentes[indice++] = auxContribuyente;
   }
 
- private:
+private:
   static string normalizarFecha(int d, int m, int a) {
     string dia = normalizaNumero(d, 2);
     string mes = normalizaNumero(m, 2);
@@ -92,7 +92,6 @@ class Interfaz {
 
     return dia + '/' + mes + '/' + anio;
   }
-
   static void normalizarYGuardar(char *lugarAGuardar, string cadena,
                                  int tamanio) {
     // Llenamos de espacio, hasta que tenga la longitud de tamanio con metodo
@@ -109,10 +108,11 @@ class Interfaz {
       // esto es para que no nos corte la cadena, y sigamos poniendo espacios
       // '\0' es un caracter que indica cuando se acaba la cadena, si lo
       // encontramos lo reemplazamos por un espacio
-      if (lugarAGuardar[i] == '\0') lugarAGuardar[i] = ' ';
+      if (lugarAGuardar[i] == '\0')
+        lugarAGuardar[i] = ' ';
     }
     lugarAGuardar[tamanio] = '\0';
   }
 };
 
-#endif  // INTERFAZ_H
+#endif // INTERFAZ_H

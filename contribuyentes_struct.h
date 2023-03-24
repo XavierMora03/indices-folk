@@ -7,6 +7,8 @@
 #define DELIMITADOR_REGISTRO '\n'
 #define DELIMITADOR_CAMPO '|'
 
+#define NOMBRE_ARCHIVO_DATOS "HACIENDA.txt"
+
 #define T_RFC 13
 #define T_NOMBRE 32
 #define T_APELLIDO 32
@@ -17,7 +19,20 @@
 #define T_ESTADO_CIVIL 1
 #define T_DEPENDIENTES 1
 
+#define NOMBRE_ARCHIVO_INDICE_PRIMARIO "INDICE_PRIMARIO.txt"
+#define NOMBRE_ARCHIVO_INDICE_SECUNDARIO "INDICE_SECUNDARIO.txt"
 #define T_INDICE_DIRECCION 4
+
+// sumamos 10, 9 delimitadores de campo 1 de registro
+#define T_REGISTRO_CONTRIBUYENTE                                               \
+  T_RFC + T_NOMBRE + T_APELLIDO * 2 + T_TELEFONO + T_DIRECCION + T_CIUDAD +    \
+      T_FECHA_NACIMIENTO + T_ESTADO_CIVIL + T_DEPENDIENTES + 10
+
+// sumamos 2, 1 delimitador de campo, 1 de registro
+#define T_REGISTRO_INDICE_PRIMARIO T_RFC + T_INDICE_DIRECCION + 2
+
+// sumamos 5, 4 delimitadores de campo, 1 de registro
+#define T_REGISTRO_INDICE_SECUNDARIO T_CIUDAD + T_INDICE_DIRECCION * 4 + 5
 
 #include <fstream>
 #include <iomanip>
@@ -54,7 +69,7 @@ string normalizaNumero(int numero, int digitos) {
 }
 
 class SimpleArchivo {
-private:
+protected:
   const string nombre_archivo;
   fstream archivo;
 
@@ -71,7 +86,7 @@ public:
     archivo.close();
   }
 
-private:
+protected:
   void escribirArchivo(const string &registro) {
     archivo.open(nombre_archivo, ios::app);
     if (archivo.fail() || archivo.bad()) {

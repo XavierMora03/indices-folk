@@ -1,18 +1,16 @@
 #ifndef INDICE_PRIMARIO_H
 #define INDICE_PRIMARIO_H
 
-#define NOMBRE_ARCHIVO_INDICE_PRIMARIO "IndicePrimario.txt"
-
 #include "contribuyentes_struct.h"
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <vector>
 using namespace std;
+
 struct stIndiceRfc {
   char rfc[T_RFC + 1];
   int indice; // 2 bytes (NRR)
-
   // constructor
   stIndiceRfc(char *rfc, int direccion) {
     // copiamos el rfc
@@ -20,48 +18,38 @@ struct stIndiceRfc {
     // ponemos indice
     this->indice = direccion;
   }
-  bool operator<(const stIndiceRfc &a) const { return this->rfc < a.rfc; }
+  bool operator<(const stIndiceRfc &a) const { return (this->rfc < a.rfc); }
 };
 
-class IndicePrimario {
-public:
+class IndicePrimario : public SimpleArchivo {
 private:
   vector<stIndiceRfc> list;
-  fstream archivo;
 
 public:
-  IndicePrimario(){};
-  ~IndicePrimario(){};
-  int insertar(char *rfc, int direccion) {
-    stIndiceRfc IndiceAgregar(rfc, direccion);
-    // BUSCAMOS DONDE INSERTAR
-    list.insert(upper_bound(list.begin(), list.end(), IndiceAgregar),
-                IndiceAgregar);
+  IndicePrimario(string s) : SimpleArchivo(s) {}
+  ~IndicePrimario() {}
 
+  int insertar(char *rfc, int direccion) {
+    stIndiceRfc auxIndice(rfc, direccion);
+    list.insert(upper_bound(list.begin(), list.end(), auxIndice), auxIndice);
+
+    string registroString = registroAtexto(auxIndice);
+    escribirArchivo(registroString);
     return 1;
   }
 
 private:
-  int iniciarArchivo() {
-    archivo.open(NOMBRE_ARCHIVO_INDICE_PRIMARIO, ios::in);
-    if (archivo.fail()) {
-      archivo.open(NOMBRE_ARCHIVO_INDICE_PRIMARIO, ios::out);
-    }
-    archivo.close();
-    return 0;
-  }
-  void insertar(const stIndiceRfc &ind) {
+  string registroAtexto(const stIndiceRfc &ind) {
     string buffer;
     buffer += ind.rfc;
-    buffer += DELIMITADOR_REGISTRO;
+    buffer += DELIMITADOR_CAMPO;
     buffer += normalizaNumero(ind.indice, T_INDICE_DIRECCION);
     buffer += DELIMITADOR_REGISTRO;
 
-    iniciarArchivo();
-    archivo.open(NOMBRE_ARCHIVO_INDICE_PRIMARIO, ios::app);
-    archivo << buffer;
-    archivo.close();
+    return buffer;
   }
+
+  void cargarIndice() {}
 };
 
 #endif // INDICE_PRIMARIO_H
