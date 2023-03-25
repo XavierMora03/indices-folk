@@ -42,6 +42,10 @@ public:
     // pasamos registro a escribirRegistro, le pasamos 's'
     escribirArchivo(s);
   }
+
+  contribuyente dameContribuyente(int direccion) {
+    archivo.open(nombre_archivo, ios::in);
+  }
 };
 
 #endif // ARCHIVO_DATOS_H

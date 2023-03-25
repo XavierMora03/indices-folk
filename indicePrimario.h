@@ -50,6 +50,20 @@ public:
     string registroString = registroAtexto(indInsertar);
     escribirArchivo(registroString);
   }
+  int consultaIndice(const string &llave) const {
+    stIndiceRfc ind(llave.c_str(), 0);
+    if (!existe(llave)) {
+      cout << "La llave " << llave << " no existe";
+      return -1;
+    }
+    // encontramos el registro con upper bound, le pasamos el inicio
+    // list.begin(),hasta el final list.end(), y queremos buscar la posicion de
+    // ind
+    auto registro = upper_bound(list.begin(), list.end(), ind);
+    // como nos retoruna un puntero, usamos la flechita -> y retornamos el
+    // registro->indice
+    return registro->indice;
+  }
 
 private:
   void insertarAListaOrdenada(const stIndiceRfc &ind) {
@@ -96,21 +110,6 @@ private:
     // importa lo demás, la direccion
     stIndiceRfc ind(llave.c_str(), 0);
     return binary_search(list.begin(), list.end(), ind);
-  }
-
-  int consultaIndice(const string &llave) const {
-    stIndiceRfc ind(llave.c_str(), 0);
-    if (!existe(llave)) {
-      cout << "La llave " << llave << " no existe";
-      return -1;
-    }
-    // encontramos el registro con upper bound, le pasamos el inicio
-    // list.begin(),hasta el final list.end(), y queremos buscar la posicion de
-    // ind
-    auto registro = upper_bound(list.begin(), list.end(), ind);
-    // como nos retoruna un puntero, usamos la flechita -> y retornamos el
-    // registro->indice
-    return registro->indice;
   }
 
 public:

@@ -92,8 +92,7 @@ private:
 
     return dia + '/' + mes + '/' + anio;
   }
-  static void normalizarYGuardar(char *lugarAGuardar, string cadena,
-                                 int tamanio) {
+  void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
     // Llenamos de espacio, hasta que tenga la longitud de tamanio con metodo
     // resize, y le indicamos el tamanio
     cadena.resize(tamanio);
