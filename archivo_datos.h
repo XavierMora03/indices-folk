@@ -45,6 +45,37 @@ public:
 
   contribuyente dameContribuyente(int direccion) {
     archivo.open(nombre_archivo, ios::in);
+    archivo.seekg(direccion);
+
+    string aux;
+
+    // char c = archivo.get();
+    // cout << "agarre: " << c << " " << int(c) << ";" << endl;
+
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << aux << endl;
+    getline(archivo, aux, DELIMITADOR_REGISTRO);
+    cout << aux << endl;
+
+    archivo.close();
+    contribuyente cont;
+    return cont;
   }
 };
 

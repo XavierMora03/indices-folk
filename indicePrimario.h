@@ -1,12 +1,13 @@
 #ifndef INDICE_PRIMARIO_H
 #define INDICE_PRIMARIO_H
 
-#include "contribuyentes_struct.h"
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <string>
 #include <vector>
+
+#include "contribuyentes_struct.h"
 using namespace std;
 
 struct stIndiceRfc {
@@ -69,6 +70,7 @@ private:
   void insertarAListaOrdenada(const stIndiceRfc &ind) {
     list.insert(upper_bound(list.cbegin(), list.cend(), ind), ind);
   }
+
   string registroAtexto(stIndiceRfc &ind) {
     string buffer;
     buffer += ind.rfc;
@@ -95,7 +97,7 @@ private:
       string rfc = aux.substr(0, T_RFC);
       // ahora tenemos el rfc guardado
       // sabemos que nuestro codigo esta en la posicion inicial de T_RFC + 1,
-      // iniciamos tomando de ahi, y tomamos el tamaño de la direccion (T@sJ)
+      // iniciamos tomando de ahi, y tomamos el tamaño de la direccion
       string indice = aux.substr(T_RFC + 1, T_INDICE_DIRECCION);
       // cout << rfc << ';' << indice << ';' << endl;
 

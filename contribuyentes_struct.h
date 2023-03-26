@@ -34,9 +34,12 @@
 // sumamos 5, 4 delimitadores de campo, 1 de registro
 #define T_REGISTRO_INDICE_SECUNDARIO T_CIUDAD + T_INDICE_DIRECCION * 4 + 5
 
+#include <chrono>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
+#include <random>
 #include <sstream>
 #include <string>
 using namespace std;
@@ -48,6 +51,7 @@ struct contribuyente {
   char telefono[T_TELEFONO + 1];
   char direccion[T_DIRECCION + 1];
   char ciudad[T_CIUDAD + 1];
+
   char
       fechaNacimiento[T_FECHA_NACIMIENTO + 1]; // formato AAAA/MM/DD: Año, mes y
                                                //  día
@@ -55,12 +59,39 @@ struct contribuyente {
   int dependientes;
 };
 
-void generaLlaveCanonica(contribuyente &contr) {
-  // Crear una función con la forma canónica de la llave (RFC) CCCCDDDDDDDCD
-  //(C=character, D= Digit)
+string generateKey(contribuyente &contr) {
+  /// Crear una función con la forma canónica de la llave (RFC) CCCCDDDDDDDCD
+  const char id1[] = {'Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R',
+                      'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I',
+                      'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
+  string keyFinal;
+  default_random_engine generador(
+      chrono::system_clock::now().time_since_epoch().count());
+  uniform_int_distribution<int> distribucion(0, 9);
+  auto randomNum = bind(distribucion, generador);
 
-  // ya que pusiste esta el rfc lo retornamos :)
+  default_random_engine generador2(
+      chrono::system_clock::now().time_since_epoch().count());
+  uniform_int_distribution<int> distribucion2(0, 26);
+  auto randomNum2 = bind(distribucion, generador);
+
+  keyFinal = contr.apellido[0][0];
+  keyFinal += contr.apellido[0][1];
+  keyFinal += contr.apellido[1][0];
+  keyFinal += contr.nombre[0];
+  keyFinal += contr.fechaNacimiento[2];
+  keyFinal += contr.fechaNacimiento[3];
+  keyFinal += contr.fechaNacimiento[5];
+  keyFinal += contr.fechaNacimiento[6];
+  keyFinal += contr.fechaNacimiento[8];
+  keyFinal += contr.fechaNacimiento[9];
+  keyFinal += to_string(randomNum());
+  keyFinal += id1[randomNum2()];
+  keyFinal += to_string(randomNum());
+
+  return keyFinal;
 }
+
 // pone ceros a la izquiera de numero hasta llenar n digitos
 string normalizaNumero(int numero, int digitos) {
   stringstream ss;
