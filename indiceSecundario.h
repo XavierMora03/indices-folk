@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -12,24 +13,6 @@ using namespace std;
 struct stIndiceCiudad {
   char ciudad[T_CIUDAD + 1];
   char rfc[4][T_RFC + 1];
-  stIndiceCiudad(const char *city, const char *rfc1) {
-    llenaEspacios();
-    strcpy(ciudad, city);
-    strcpy(rfc[0], rfc1);
-  }
-  void llenaEspacios() {
-    for (int i = 0; i < T_RFC; i++) {
-      rfc[0][i] = ' ';
-      rfc[1][i] = ' ';
-      rfc[2][i] = ' ';
-      rfc[3][i] = ' ';
-    }
-    rfc[0][T_RFC] = '\0';
-    rfc[1][T_RFC] = '\0';
-    rfc[2][T_RFC] = '\0';
-    rfc[3][T_RFC] = '\0';
-  }
-  stIndiceCiudad() { llenaEspacios(); }
 
   bool operator<(const stIndiceCiudad &a) const {
     int res = strcmp(this->ciudad, a.ciudad);
@@ -47,7 +30,10 @@ struct stIndiceCiudad {
 
 class IndiceSecundario : public SimpleArchivo {
 public:
-  IndiceSecundario(string s) : SimpleArchivo(s) { cargarIndices(); }
+  IndiceSecundario(string s) : SimpleArchivo(s) {
+    cargarIndices();
+    inicializaArchivo();
+  }
   ~IndiceSecundario() {}
 
 private:
@@ -58,55 +44,83 @@ public:
     // buscamos si esta la ciudad
     // llamamos al constructor de indice, solo le pasamos la ciudad, para
     // comparar si existen ciudades
-    stIndiceCiudad ind(ciudad, rfc);
+    cout << "CIUDAD: " << ciudad << ";rfc:" << rfc << endl;
+    stIndiceCiudad ind;
+    normalizarYGuardar(ind.ciudad, ciudad, T_CIUDAD);
+    normalizarYGuardar(ind.rfc[0], rfc, T_RFC);
+    llenarEspacios(ind.rfc[1], T_RFC);
+    llenarEspacios(ind.rfc[2], T_RFC);
+    llenarEspacios(ind.rfc[3], T_RFC);
+
     bool ciudadEnlista = binary_search(list.begin(), list.end(), ind);
 
     if (ciudadEnlista == true) {
+      cout << "SI ESTA EN LISTA MI REGISTRO " << registroAtexto(ind);
       // encontramos la posicion donde esta, usando upper_bound, retorna un
       // puntero pa saber donde esta
       auto posicionCiudad = upper_bound(list.begin(), list.end(), ind);
 
       for (int i = 0; i < 4; i++) {
         // if (posicionCiudad->rfc[i][0] == '\0')
+        char c = posicionCiudad->rfc[i][0];
+        cout << "ESTE ES EL CARACTER i:" << i << " " << c << ";" << int(c)
+             << endl;
         if (posicionCiudad->rfc[i][0] == ' ') {
+          cout << "SE ENCONTRO UN LUGAR DISPONIBLE PARA " << rfc << endl;
           // si hay algun espacio disponible, ponemos el rfc,depues de ponerlo
           // salimos con break;
-          strcpy(posicionCiudad->rfc[i], rfc);
-          reEscribirRegistro(*posicionCiudad, dir);
+          normalizarYGuardar(posicionCiudad->rfc[i], ind.rfc[0], T_RFC);
+          // ahora que actualizamos en memoria ram, tenemos que actualizar en
+          // archivo
+          actualizaIndices();
           break;
         }
       }
 
     } else {
-      // si no esta en la lista, agregamos la
-      insertarAListaOrdenada(ind);
-    }
-    string registroString = registroAtexto(ind);
-    escribirArchivo(registroString);
-  }
-  /*
-  int consultaIndice(const string &llave) const {
-    stIndiceCiudad ind(llave.c_str(), 0);
-    if (!existe(llave)) {
-      cout << "La llave " << llave << " no existe";
-      return -1;
-    }
-    // encontramos el registro con upper bound, le pasamos el inicio
-    // list.begin(),hasta el final list.end(), y queremos buscar la posicion de
-    // ind
-    auto registro = upper_bound(list.begin(), list.end(), ind);
-    // como nos retoruna un puntero, usamos la flechita -> y retornamos el
-    // registro->indice
-    return registro->indice;
-  }
-*/
-private:
-  void reEscribirRegistro(stIndiceCiudad ind, int pos) {
-    archivo.open(nombre_archivo, ios::out);
-    // cambiamos
-    archivo.seekp(pos);
 
-    archivo.write(registroAtexto(ind).c_str(), int(T_INDICE_SECUNDARIO));
+      // si no esta en la lista, agregamos a lista ordenada
+      insertarAListaOrdenada(ind);
+      // y agregamos hasta el final del archivo
+      escribirArchivo(registroAtexto(ind));
+    }
+  }
+
+  int consultaIndice(const string &ciudad) const {
+    char auxCiudad[T_CIUDAD + 1];
+    normalizarYGuardar(auxCiudad, ciudad.c_str(), T_CIUDAD);
+    // vamos a crear un registro con la ciudad, y veremos si se encuentra, le
+    // pasamos la ciudad, y una cadena vacia para el primer rfc, ya que no lo
+    // necesitamos para comparar
+    stIndiceCiudad ind;
+    normalizarYGuardar(ind.ciudad, ciudad, T_CIUDAD);
+    llenarEspacios(ind.rfc[0], T_RFC);
+    llenarEspacios(ind.rfc[1], T_RFC);
+    llenarEspacios(ind.rfc[2], T_RFC);
+    llenarEspacios(ind.rfc[3], T_RFC);
+    // vemos si se encuentra con la busqueda binaria
+    bool existe = binary_search(list.begin(), list.end(), ind);
+
+    if (existe == true) {
+      // encontramos la posicion
+      auto pos = upper_bound(list.begin(), list.end(), ind);
+      // y MOSTRAMOS SU CONTENIDO
+      cout << "INDICE CIUDAD: " << pos->ciudad << endl;
+      cout << "RFC1: " << pos->rfc[0] << endl;
+      cout << "RFC2: " << pos->rfc[1] << endl;
+      cout << "RFC3: " << pos->rfc[2] << endl;
+    } else {
+      cout << "NO EXSISTE LA CIUDAD " << ciudad << endl;
+    }
+
+    return 0;
+  }
+
+private:
+  void actualizaIndices() {
+    archivo.open(nombre_archivo, ios::out);
+    for (int i = 0; i < list.size(); i++)
+      archivo << registroAtexto(list.at(i));
     archivo.close();
   }
   string registroAtexto(stIndiceCiudad &ind) {
@@ -137,6 +151,9 @@ private:
     // de archivo, lo vamos a guardar en aux, y le pasamos delimitador de campo
     // que es lo que indica que terminamos de guardar)
     while (!archivo.eof() and getline(archivo, aux, DELIMITADOR_CAMPO)) {
+      if (aux[0] == ' ' or aux.empty())
+        break;
+      cout << "AGARRE: " << aux << endl;
       // como entramos al while, entonces tenemos algo en aux, en este caso es
       // la ciudad por que es el primer campo del registro
       //  guardamos aux en ciudad de un registro  de indice de ciudad nuevo
@@ -151,9 +168,11 @@ private:
       // primer RFC
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[0], aux.c_str());
+
       // segundo
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[1], aux.c_str());
+
       // tercero
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[2], aux.c_str());

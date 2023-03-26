@@ -21,7 +21,7 @@ ArchivoDatos ArchivoDatos(NOMBRE_ARCHIVO_DATOS);
 void adminMenu() {
   system("Title AUTOMAXX");
   setlocale(LC_ALL, "spanish");
-
+  fflush(stdin);
   char v1;
   system("cls");
 
@@ -41,7 +41,6 @@ void adminMenu() {
     break;
 
   case '2':
-    // aqui va la busqueda();
     adminMenu();
     break;
 
@@ -59,18 +58,6 @@ void adminMenu() {
 }
 
 int main() {
-  int i = 3;
-  while (i-- > 0) {
-    contribuyente cont = Interfaz.altaRegistro();
-    Interfaz.mostrarRegistro(cont);
-    int dir = IndicePrimario.insertar(cont.rfc);
-    if (dir == -1)
-      break;
-    ArchivoDatos.escribirContribuyente(cont);
-    IndiceSecundario.insertar(cont.ciudad, cont.rfc, dir);
-  }
-  cout << "IMPRIMIENTO WE" << endl;
-  IndiceSecundario.verLista();
-  // adminMenu();
+  adminMenu();
   return 0;
 }

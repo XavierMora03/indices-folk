@@ -46,7 +46,7 @@ public:
   ~IndicePrimario() {}
 
   int insertar(const char *rfc) {
-    int ultimaDireccion = (list.size() * int(T_REGISTRO_CONTRIBUYENTE));
+    int ultimaDireccion = (list.size());
     stIndiceRfc indInsertar(rfc, ultimaDireccion);
     if (existe(rfc))
       return -1;
@@ -66,8 +66,8 @@ public:
     // ind
     auto registro = upper_bound(list.begin(), list.end(), ind);
     // como nos retoruna un puntero, usamos la flechita -> y retornamos el
-    // registro->indice
-    return registro->indice;
+    // registro->indice * el tamaño del regisrto
+    return registro->indice * int(T_REGISTRO_CONTRIBUYENTE);
   }
 
 private:
