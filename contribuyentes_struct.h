@@ -61,9 +61,9 @@ struct contribuyente {
 
 string generateKey(contribuyente &contr) {
   /// Crear una función con la forma canónica de la llave (RFC) CCCCDDDDDDDCD
-  const char id1[] = {'Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R',
-                      'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I',
-                      'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
+  const char id1[29] = {'Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R',
+                        'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I',
+                        'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
   string keyFinal;
   default_random_engine generador(
       chrono::system_clock::now().time_since_epoch().count());
@@ -108,6 +108,8 @@ void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
   for (int i = 0; i < tamanio; i++) {
     // lo toupper nos devuelve la mayuscula y lo guardamos
     char caracter_mayuscula = toupper(cadena[i]);
+    // nuestro default en donde vamos a guardar es el espacio
+    lugarAGuardar[i] = ' ';
     // reescribimos el caracter, pero ahora en mayuscula
     lugarAGuardar[i] = caracter_mayuscula;
 

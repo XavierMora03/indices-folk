@@ -7,15 +7,30 @@
 #include <string>
 #include <vector>
 
+#define T_INDICE_SECUNDARIO T_CIUDAD + T_RFC * 4 + 5
 using namespace std;
 struct stIndiceCiudad {
-  char ciudad[T_CIUDAD];
+  char ciudad[T_CIUDAD + 1];
   char rfc[4][T_RFC + 1];
   stIndiceCiudad(const char *city, const char *rfc1) {
+    llenaEspacios();
     strcpy(ciudad, city);
     strcpy(rfc[0], rfc1);
   }
-  stIndiceCiudad() {}
+  void llenaEspacios() {
+    for (int i = 0; i < T_RFC; i++) {
+      rfc[0][i] = ' ';
+      rfc[1][i] = ' ';
+      rfc[2][i] = ' ';
+      rfc[3][i] = ' ';
+    }
+    rfc[0][T_RFC] = '\0';
+    rfc[1][T_RFC] = '\0';
+    rfc[2][T_RFC] = '\0';
+    rfc[3][T_RFC] = '\0';
+  }
+  stIndiceCiudad() { llenaEspacios(); }
+
   bool operator<(const stIndiceCiudad &a) const {
     int res = strcmp(this->ciudad, a.ciudad);
     if (0 < res)
@@ -39,7 +54,7 @@ private:
   vector<stIndiceCiudad> list;
 
 public:
-  void insertar(const char *ciudad, const char *rfc) {
+  void insertar(const char *ciudad, const char *rfc, int dir) {
     // buscamos si esta la ciudad
     // llamamos al constructor de indice, solo le pasamos la ciudad, para
     // comparar si existen ciudades
@@ -53,10 +68,11 @@ public:
 
       for (int i = 0; i < 4; i++) {
         // if (posicionCiudad->rfc[i][0] == '\0')
-        if (posicionCiudad->rfc[i][0] == '\0') {
+        if (posicionCiudad->rfc[i][0] == ' ') {
           // si hay algun espacio disponible, ponemos el rfc,depues de ponerlo
           // salimos con break;
           strcpy(posicionCiudad->rfc[i], rfc);
+          reEscribirRegistro(*posicionCiudad, dir);
           break;
         }
       }
@@ -85,8 +101,17 @@ public:
   }
 */
 private:
+  void reEscribirRegistro(stIndiceCiudad ind, int pos) {
+    archivo.open(nombre_archivo, ios::out);
+    // cambiamos
+    archivo.seekp(pos);
+
+    archivo.write(registroAtexto(ind).c_str(), int(T_INDICE_SECUNDARIO));
+    archivo.close();
+  }
   string registroAtexto(stIndiceCiudad &ind) {
     string buffer;
+
     buffer += ind.ciudad;
     buffer += DELIMITADOR_CAMPO;
     buffer += ind.rfc[0];
@@ -139,6 +164,13 @@ private:
       // lo agregamos a la lista
       insertarAListaOrdenada(ind);
     }
+    archivo.close();
+  }
+
+public:
+  void verLista() {
+    for (int i(0); i < list.size(); i++)
+      cout << registroAtexto(list.at(i));
   }
 };
 

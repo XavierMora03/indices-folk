@@ -45,11 +45,15 @@ public:
   }
   ~IndicePrimario() {}
 
-  void insertar(const char *rfc, int ultimaDireccion) {
+  int insertar(const char *rfc) {
+    int ultimaDireccion = (list.size() * int(T_REGISTRO_CONTRIBUYENTE));
     stIndiceRfc indInsertar(rfc, ultimaDireccion);
+    if (existe(rfc))
+      return -1;
     insertarAListaOrdenada(indInsertar);
     string registroString = registroAtexto(indInsertar);
     escribirArchivo(registroString);
+    return ultimaDireccion;
   }
   int consultaIndice(const string &llave) const {
     stIndiceRfc ind(llave.c_str(), 0);
