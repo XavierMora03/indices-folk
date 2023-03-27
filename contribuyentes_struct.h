@@ -99,13 +99,6 @@ string normalizaNumero(int numero, int digitos) {
   return ss.str();
 }
 
-void llenarEspacios(char *lugarAGuardar, int tamanio) {
-  for (int i = 0; i < tamanio; i++) {
-    lugarAGuardar[i] = ' ';
-  }
-  lugarAGuardar[tamanio] = '\0';
-}
-
 void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
   // Llenamos de espacio, hasta que tenga la longitud de tamanio con metodo
   // resize, y le indicamos el tamanio

@@ -22,7 +22,7 @@ void adminMenu() {
   system("Title AUTOMAXX");
   setlocale(LC_ALL, "spanish");
   fflush(stdin);
-  string v1;
+  int v1;
   system("cls");
 
   cout << "\n\n\n\t\t\t|--<<--<<--<<--<<---< | MENU | >--->>-->>-->>-->>--|\n";
@@ -31,10 +31,11 @@ void adminMenu() {
   cout << "\n\n\t\t\t\tSALIR\t\t\t[3]";
   cout << "\n\n\n\t\t\t|--<<--<<--<<--<<---< | <<>> | >--->>-->>-->>-->>--|";
   cout << "\n\n\t\t\tINGRESE LA OPCION DESEADA --> ";
-  getline(cin, v1);
-  char v = v1[0];
-  switch (v) {
-    case '1':
+
+  cin >> v1;
+  getchar();
+  switch (v1) {
+    case 1: {
       cout << "AGREGAR CONTRIBUYENTE\n";
       contribuyente cont = Interfaz.altaRegistro();
       int error_llaveExiste = IndicePrimario.insertar(cont.rfc);
@@ -48,13 +49,13 @@ void adminMenu() {
       IndiceSecundario.insertar(cont.ciudad, cont.rfc);
       adminMenu();
       break;
-
-    case '2': {
+    }
+    case 2: {
       cout << "CONSULTA\n";
-      string consultaOpcion;
+      int consultaOpcion;
       cout << "1 para consulta por RFC\n2 para consulta por CIUDAD: ";
-      getline(cin, consultaOpcion);
-      if (consultaOpcion == "1") {
+      cin >> consultaOpcion;
+      if (consultaOpcion == 1) {
         string rfcStr;
         cout << "Introdusca la llave: ";
         int dir = IndicePrimario.consultaIndice(rfcStr);
@@ -67,12 +68,12 @@ void adminMenu() {
         // e imprimimos
         Interfaz.mostrarRegistro(registroAConsultar);
       }
-      if (consultaOpcion == "2") {
+      if (consultaOpcion == 2) {
       }
       adminMenu();
       break;
     }
-    case '3':
+    case 3:
       system("cls");
       cout << "\n\n\n\n\t\t\t|--<<--<<--<<--<<---< | SALIENDO... | "
               ">--->>-->>-->>-->>--|";
@@ -86,6 +87,13 @@ void adminMenu() {
 }
 
 int main() {
-  adminMenu();
+  IndiceSecundario.verLista();
+  int i = 3;
+  while (i-- > 0) {
+    contribuyente cont = Interfaz.altaRegistro();
+    IndicePrimario.insertar(cont.rfc);
+    IndiceSecundario.insertar(cont.ciudad, cont.rfc);
+  }
+  // adminMenu();
   return 0;
 }

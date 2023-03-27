@@ -10,11 +10,19 @@
 #include "contribuyentes_struct.h"
 
 #define T_INDICE_SECUNDARIO T_CIUDAD + T_RFC * 4 + 5
+const char ESPACIOS_CADENA_60[60] =
+    "                                                           ";
 using namespace std;
 struct stIndiceCiudad {
   char ciudad[T_CIUDAD + 1];
   char rfc[4][T_RFC + 1];
 
+  stIndiceCiudad(const char *ciudad = ESPACIOS_CADENA_60,
+                 const char *rfc = ESPACIOS_CADENA_60) {
+    llenarEspacios();
+    normalizarYGuardar(this->ciudad, ciudad, T_CIUDAD);
+    normalizarYGuardar(this->rfc[0], rfc, T_RFC);
+  }
   bool operator<(const stIndiceCiudad &a) const {
     int res = strcmp(this->ciudad, a.ciudad);
     if (0 < res) return true;
@@ -24,6 +32,12 @@ struct stIndiceCiudad {
     int res = strcmp(this->ciudad, a.ciudad);
     if (res == 0) return true;
     return false;
+  }
+  void llenarEspacios() {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < T_RFC; j++) this->rfc[i][j] = ' ';
+      rfc[i][T_RFC] = '\0';
+    }
   }
 };
 
@@ -43,29 +57,20 @@ class IndiceSecundario : public SimpleArchivo {
     // buscamos si esta la ciudad
     // llamamos al constructor de indice, solo le pasamos la ciudad, para
     // comparar si existen ciudades
-    cout << "CIUDAD: " << ciudad << ";rfc:" << rfc << endl;
-    stIndiceCiudad ind;
-    normalizarYGuardar(ind.ciudad, ciudad, T_CIUDAD);
-    normalizarYGuardar(ind.rfc[0], rfc, T_RFC);
-    llenarEspacios(ind.rfc[1], T_RFC);
-    llenarEspacios(ind.rfc[2], T_RFC);
-    llenarEspacios(ind.rfc[3], T_RFC);
-
+    stIndiceCiudad ind((char *)ciudad, (char *)rfc);
+    cout << "SE CREO IN CON " << ind.ciudad << endl;
     bool ciudadEnlista = binary_search(list.begin(), list.end(), ind);
-
+    cout << "TENGO QUE BUSCAR ESTA LLAVE" << ciudad
+         << " Y ESTE RESULTADO ME DIO " << ciudadEnlista << endl;
     if (ciudadEnlista == true) {
-      cout << "SI ESTA EN LISTA MI REGISTRO " << registroAtexto(ind);
       // encontramos la posicion donde esta, usando upper_bound, retorna un
       // puntero pa saber donde esta
-      auto posicionCiudad = upper_bound(list.begin(), list.end(), ind);
-
+      auto posicionCiudad = lower_bound(list.begin(), list.end(), ind);
+      cout << "Y ENTONCES TENEMOS ESTA CIUDAD " << ciudad << " QUE COINCIDE? "
+           << posicionCiudad->ciudad << endl;
       for (int i = 0; i < 4; i++) {
         // if (posicionCiudad->rfc[i][0] == '\0')
-        char c = posicionCiudad->rfc[i][0];
-        cout << "ESTE ES EL CARACTER i:" << i << " " << c << ";" << int(c)
-             << endl;
         if (posicionCiudad->rfc[i][0] == ' ') {
-          cout << "SE ENCONTRO UN LUGAR DISPONIBLE PARA " << rfc << endl;
           // si hay algun espacio disponible, ponemos el rfc,depues de ponerlo
           // salimos con break;
           normalizarYGuardar(posicionCiudad->rfc[i], ind.rfc[0], T_RFC);
@@ -90,12 +95,7 @@ class IndiceSecundario : public SimpleArchivo {
     // vamos a crear un registro con la ciudad, y veremos si se encuentra, le
     // pasamos la ciudad, y una cadena vacia para el primer rfc, ya que no lo
     // necesitamos para comparar
-    stIndiceCiudad ind;
-    normalizarYGuardar(ind.ciudad, ciudad, T_CIUDAD);
-    llenarEspacios(ind.rfc[0], T_RFC);
-    llenarEspacios(ind.rfc[1], T_RFC);
-    llenarEspacios(ind.rfc[2], T_RFC);
-    llenarEspacios(ind.rfc[3], T_RFC);
+    stIndiceCiudad ind((char *)ciudad.c_str());
     // vemos si se encuentra con la busqueda binaria
     bool existe = binary_search(list.begin(), list.end(), ind);
 
@@ -147,36 +147,19 @@ class IndiceSecundario : public SimpleArchivo {
     // mientras no se termine el archivo, y capturemos algo, (vamos a capturar
     // de archivo, lo vamos a guardar en aux, y le pasamos delimitador de campo
     // que es lo que indica que terminamos de guardar)
-    while (!archivo.eof() and getline(archivo, aux, DELIMITADOR_CAMPO)) {
-      if (aux[0] == ' ' or aux.empty()) break;
-      cout << "AGARRE: " << aux << endl;
-      // como entramos al while, entonces tenemos algo en aux, en este caso es
-      // la ciudad por que es el primer campo del registro
-      //  guardamos aux en ciudad de un registro  de indice de ciudad nuevo
-      stIndiceCiudad ind;
-      // guardamos la ciudad que esta en aux, hacia el registro, para eso usamos
-      // strcpy y lo guardamos, pero le pasamos el string en cadena usando
-      // aux.c_str()
-      strcpy(ind.ciudad, aux.c_str());
-      // como tomamamos la ciudad, tenemos que tomar el resto del registro, (los
-      // demas rfc)
 
-      // primer RFC
+    while (!archivo.eof() and getline(archivo, aux, DELIMITADOR_CAMPO)) {
+      stIndiceCiudad ind;
+      strcpy(ind.ciudad, aux.c_str());
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[0], aux.c_str());
-
-      // segundo
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[1], aux.c_str());
-
-      // tercero
       getline(archivo, aux, DELIMITADOR_CAMPO);
       strcpy(ind.rfc[2], aux.c_str());
-      // cuarto y ultimo, OJO QUE buscamos hasta el delimitadorde registro
       getline(archivo, aux, DELIMITADOR_REGISTRO);
-      strcpy(ind.rfc[0], aux.c_str());
+      strcpy(ind.rfc[3], aux.c_str());
 
-      // lo agregamos a la lista
       insertarAListaOrdenada(ind);
     }
     archivo.close();
