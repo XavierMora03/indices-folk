@@ -1,12 +1,13 @@
 #ifndef INDICE_SECUNDARIO_H
 #define INDICE_SECUNDARIO_H
-#include "contribuyentes_struct.h"
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "contribuyentes_struct.h"
 
 #define T_INDICE_SECUNDARIO T_CIUDAD + T_RFC * 4 + 5
 using namespace std;
@@ -16,31 +17,29 @@ struct stIndiceCiudad {
 
   bool operator<(const stIndiceCiudad &a) const {
     int res = strcmp(this->ciudad, a.ciudad);
-    if (0 < res)
-      return true;
+    if (0 < res) return true;
     return false;
   }
   bool operator==(const stIndiceCiudad &a) const {
     int res = strcmp(this->ciudad, a.ciudad);
-    if (res == 0)
-      return true;
+    if (res == 0) return true;
     return false;
   }
 };
 
 class IndiceSecundario : public SimpleArchivo {
-public:
+ public:
   IndiceSecundario(string s) : SimpleArchivo(s) {
     cargarIndices();
     inicializaArchivo();
   }
   ~IndiceSecundario() {}
 
-private:
+ private:
   vector<stIndiceCiudad> list;
 
-public:
-  void insertar(const char *ciudad, const char *rfc, int dir) {
+ public:
+  void insertar(const char *ciudad, const char *rfc) {
     // buscamos si esta la ciudad
     // llamamos al constructor de indice, solo le pasamos la ciudad, para
     // comparar si existen ciudades
@@ -78,7 +77,6 @@ public:
       }
 
     } else {
-
       // si no esta en la lista, agregamos a lista ordenada
       insertarAListaOrdenada(ind);
       // y agregamos hasta el final del archivo
@@ -116,11 +114,10 @@ public:
     return 0;
   }
 
-private:
+ private:
   void actualizaIndices() {
     archivo.open(nombre_archivo, ios::out);
-    for (int i = 0; i < list.size(); i++)
-      archivo << registroAtexto(list.at(i));
+    for (int i = 0; i < list.size(); i++) archivo << registroAtexto(list.at(i));
     archivo.close();
   }
   string registroAtexto(stIndiceCiudad &ind) {
@@ -151,8 +148,7 @@ private:
     // de archivo, lo vamos a guardar en aux, y le pasamos delimitador de campo
     // que es lo que indica que terminamos de guardar)
     while (!archivo.eof() and getline(archivo, aux, DELIMITADOR_CAMPO)) {
-      if (aux[0] == ' ' or aux.empty())
-        break;
+      if (aux[0] == ' ' or aux.empty()) break;
       cout << "AGARRE: " << aux << endl;
       // como entramos al while, entonces tenemos algo en aux, en este caso es
       // la ciudad por que es el primer campo del registro
@@ -186,11 +182,10 @@ private:
     archivo.close();
   }
 
-public:
+ public:
   void verLista() {
-    for (int i(0); i < list.size(); i++)
-      cout << registroAtexto(list.at(i));
+    for (int i(0); i < list.size(); i++) cout << registroAtexto(list.at(i));
   }
 };
 
-#endif // INDICE_SECUNDARIO_H
+#endif  // INDICE_SECUNDARIO_H

@@ -22,7 +22,7 @@ void adminMenu() {
   system("Title AUTOMAXX");
   setlocale(LC_ALL, "spanish");
   fflush(stdin);
-  char v1;
+  string v1;
   system("cls");
 
   cout << "\n\n\n\t\t\t|--<<--<<--<<--<<---< | MENU | >--->>-->>-->>-->>--|\n";
@@ -31,29 +31,57 @@ void adminMenu() {
   cout << "\n\n\t\t\t\tSALIR\t\t\t[3]";
   cout << "\n\n\n\t\t\t|--<<--<<--<<--<<---< | <<>> | >--->>-->>-->>-->>--|";
   cout << "\n\n\t\t\tINGRESE LA OPCION DESEADA --> ";
+  getline(cin, v1);
+  char v = v1[0];
+  switch (v) {
+    case '1':
+      cout << "AGREGAR CONTRIBUYENTE\n";
+      contribuyente cont = Interfaz.altaRegistro();
+      int error_llaveExiste = IndicePrimario.insertar(cont.rfc);
+      if (error_llaveExiste == -1) {
+        cout << "La llave ya existe, saliendo de añadir." << endl;
+        break;
+      }
+      // como ya probamos que no exsite, lo añadirmos al archivo de datos
+      ArchivoDatos.escribirContribuyente(cont);
+      // tambien lo escribimos al Indice secundario
+      IndiceSecundario.insertar(cont.ciudad, cont.rfc);
+      adminMenu();
+      break;
 
-  cin >> v1;
+    case '2': {
+      cout << "CONSULTA\n";
+      string consultaOpcion;
+      cout << "1 para consulta por RFC\n2 para consulta por CIUDAD: ";
+      getline(cin, consultaOpcion);
+      if (consultaOpcion == "1") {
+        string rfcStr;
+        cout << "Introdusca la llave: ";
+        int dir = IndicePrimario.consultaIndice(rfcStr);
+        // en dado case de que la llave no exsista
+        if (dir == -1) {
+          break;
+        }
+        // llegamos aca, entonces si exsite
+        contribuyente registroAConsultar = ArchivoDatos.dameContribuyente(dir);
+        // e imprimimos
+        Interfaz.mostrarRegistro(registroAConsultar);
+      }
+      if (consultaOpcion == "2") {
+      }
+      adminMenu();
+      break;
+    }
+    case '3':
+      system("cls");
+      cout << "\n\n\n\n\t\t\t|--<<--<<--<<--<<---< | SALIENDO... | "
+              ">--->>-->>-->>-->>--|";
+      exit(0);
+      break;
 
-  switch (v1) {
-
-  case '1':
-    adminMenu();
-    break;
-
-  case '2':
-    adminMenu();
-    break;
-
-  case '3':
-    system("cls");
-    cout << "\n\n\n\n\t\t\t|--<<--<<--<<--<<---< | SALIENDO... | "
-            ">--->>-->>-->>-->>--|";
-    exit(0);
-    break;
-
-  default:
-    adminMenu();
-    break;
+    default:
+      adminMenu();
+      break;
   }
 }
 

@@ -11,7 +11,7 @@
 using namespace std;
 
 class ArchivoDatos : public SimpleArchivo {
-public:
+ public:
   ArchivoDatos(string s) : SimpleArchivo(s) { inicializaArchivo(); }
   ~ArchivoDatos() {}
 
@@ -79,4 +79,4 @@ public:
   }
 };
 
-#endif // ARCHIVO_DATOS_H
+#endif  // ARCHIVO_DATOS_H

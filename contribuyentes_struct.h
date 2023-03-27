@@ -24,8 +24,8 @@
 #define T_INDICE_DIRECCION 4
 
 // sumamos 10, 9 delimitadores de campo 1 de registro
-#define T_REGISTRO_CONTRIBUYENTE                                               \
-  T_RFC + T_NOMBRE + T_APELLIDO * 2 + T_TELEFONO + T_DIRECCION + T_CIUDAD +    \
+#define T_REGISTRO_CONTRIBUYENTE                                            \
+  T_RFC + T_NOMBRE + T_APELLIDO * 2 + T_TELEFONO + T_DIRECCION + T_CIUDAD + \
       T_FECHA_NACIMIENTO + T_ESTADO_CIVIL + T_DEPENDIENTES + 10
 
 // sumamos 2, 1 delimitador de campo, 1 de registro
@@ -45,16 +45,16 @@
 using namespace std;
 
 struct contribuyente {
-  char rfc[T_RFC + 1]; // mascara (formato de captura) CCCCDDDDDDDCD
+  char rfc[T_RFC + 1];  // mascara (formato de captura) CCCCDDDDDDDCD
   char nombre[T_NOMBRE + 1];
   char apellido[2][T_APELLIDO + 1];
   char telefono[T_TELEFONO + 1];
   char direccion[T_DIRECCION + 1];
   char ciudad[T_CIUDAD + 1];
 
-  char
-      fechaNacimiento[T_FECHA_NACIMIENTO + 1]; // formato AAAA/MM/DD: Año, mes y
-                                               //  día
+  char fechaNacimiento[T_FECHA_NACIMIENTO +
+                       1];  // formato AAAA/MM/DD: Año, mes y
+                            //  día
   char estadoCivil;
   int dependientes;
 };
@@ -121,18 +121,17 @@ void normalizarYGuardar(char *lugarAGuardar, string cadena, int tamanio) {
     // esto es para que no nos corte la cadena, y sigamos poniendo espacios
     // '\0' es un caracter que indica cuando se acaba la cadena, si lo
     // encontramos lo reemplazamos por un espacio
-    if (lugarAGuardar[i] == '\0')
-      lugarAGuardar[i] = ' ';
+    if (lugarAGuardar[i] == '\0') lugarAGuardar[i] = ' ';
   }
   lugarAGuardar[tamanio] = '\0';
 }
 
 class SimpleArchivo {
-protected:
+ protected:
   const string nombre_archivo;
   fstream archivo;
 
-public:
+ public:
   SimpleArchivo(string n) : nombre_archivo(n){};
   ~SimpleArchivo(){};
 
@@ -140,20 +139,21 @@ public:
     // checar si existe ios::in
     archivo.open(nombre_archivo, ios::in);
     // si falla, no existe, entonces lo creamos iso::out
-    if (archivo.fail())
-      archivo.open(nombre_archivo, ios::out);
+    if (archivo.fail()) archivo.open(nombre_archivo, ios::out);
     archivo.close();
   }
 
-protected:
+ protected:
   void escribirArchivo(const string &registro) {
     archivo.open(nombre_archivo, ios::app);
     if (archivo.fail() || archivo.bad()) {
       cout << "ERROR EN ARCHIVO " << nombre_archivo << endl;
       return;
     }
+    // escribimos al archivo con << registro
     archivo << registro;
+    // cerrarlo
     archivo.close();
   }
 };
-#endif // CONTR_STRUCT_H
+#endif  // CONTR_STRUCT_H
