@@ -12,33 +12,31 @@ using namespace std;
 
 struct stIndiceRfc {
   char rfc[T_RFC + 1];
-  int indice; // 2 bytes (NRR)
+  int indice;  // 2 bytes (NRR)
   // constructor
   stIndiceRfc(const char *rfc, int direccion) {
     // copiamos el rfc
-    strcpy(this->rfc, rfc);
+    normalizarYGuardar(this->rfc, rfc, T_RFC);
     // ponemos indice
     this->indice = direccion;
   }
   bool operator<(const stIndiceRfc &a) const {
     int res = strcmp(this->rfc, a.rfc);
-    if (0 < res)
-      return true;
+    if (0 < res) return true;
     return false;
   }
   bool operator==(const stIndiceRfc &a) const {
     int res = strcmp(this->rfc, a.rfc);
-    if (res == 0)
-      return true;
+    if (res == 0) return true;
     return false;
   }
 };
 
 class IndicePrimario : public SimpleArchivo {
-private:
+ private:
   vector<stIndiceRfc> list;
 
-public:
+ public:
   IndicePrimario(string s) : SimpleArchivo(s) {
     cargarIndices();
     inicializaArchivo();
@@ -48,8 +46,7 @@ public:
   int insertar(const char *rfc) {
     int ultimaDireccion = (list.size());
     stIndiceRfc indInsertar(rfc, ultimaDireccion);
-    if (existe(rfc))
-      return -1;
+    if (existe(rfc)) return -1;
     insertarAListaOrdenada(indInsertar);
     string registroString = registroAtexto(indInsertar);
     escribirArchivo(registroString);
@@ -64,13 +61,13 @@ public:
     // encontramos el registro con upper bound, le pasamos el inicio
     // list.begin(),hasta el final list.end(), y queremos buscar la posicion de
     // ind
-    auto registro = upper_bound(list.begin(), list.end(), ind);
+    auto registro = lower_bound(list.begin(), list.end(), ind);
     // como nos retoruna un puntero, usamos la flechita -> y retornamos el
     // registro->indice * el tamaño del regisrto
     return registro->indice * int(T_REGISTRO_CONTRIBUYENTE);
   }
 
-private:
+ private:
   void insertarAListaOrdenada(const stIndiceRfc &ind) {
     list.insert(upper_bound(list.cbegin(), list.cend(), ind), ind);
   }
@@ -117,12 +114,6 @@ private:
     stIndiceRfc ind(llave.c_str(), 0);
     return binary_search(list.begin(), list.end(), ind);
   }
-
-public:
-  void imprimirRegistros() {
-    for (int i(0); i < list.size(); i++)
-      cout << list.at(i).rfc << ";" << list.at(i).indice << endl;
-  }
 };
 
-#endif // INDICE_PRIMARIO_H
+#endif  // INDICE_PRIMARIO_H

@@ -43,39 +43,36 @@ class ArchivoDatos : public SimpleArchivo {
     escribirArchivo(s);
   }
 
-  contribuyente dameContribuyente(int direccion) {
+  void muestraContribuyente(int direccion) {
     archivo.open(nombre_archivo, ios::in);
     archivo.seekg(direccion);
 
     string aux;
 
-    // char c = archivo.get();
-    // cout << "agarre: " << c << " " << int(c) << ";" << endl;
-
+    cout << "MOSTRANDO CONTRIBUYENTE" << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tRFC: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tNombre: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tApellido paterno: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tApellido materno: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tTelefono: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tDireccion: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tCiudad: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tFecha nacimiento: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_CAMPO);
-    cout << aux << endl;
+    cout << "\t\t\t\tEstado civil: " << aux << endl;
+    getline(archivo, aux, DELIMITADOR_CAMPO);
+    cout << "\t\t\t\tDependientes: " << aux << endl;
     getline(archivo, aux, DELIMITADOR_REGISTRO);
-    cout << aux << endl;
 
     archivo.close();
-    contribuyente cont;
-    return cont;
   }
 };
 

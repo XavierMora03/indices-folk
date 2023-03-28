@@ -101,12 +101,13 @@ class IndiceSecundario : public SimpleArchivo {
 
     if (existe == true) {
       // encontramos la posicion
-      auto pos = upper_bound(list.begin(), list.end(), ind);
+      auto pos = lower_bound(list.begin(), list.end(), ind);
       // y MOSTRAMOS SU CONTENIDO
       cout << "INDICE CIUDAD: " << pos->ciudad << endl;
       cout << "RFC1: " << pos->rfc[0] << endl;
       cout << "RFC2: " << pos->rfc[1] << endl;
       cout << "RFC3: " << pos->rfc[2] << endl;
+      cout << "RFC4: " << pos->rfc[3] << endl;
     } else {
       cout << "NO EXSISTE LA CIUDAD " << ciudad << endl;
     }
